@@ -1,6 +1,8 @@
 # Carnegie Fabrics Window Products
 I chose to analyze Carnegie Fabrics because they are a direct competitor for window products and also utilize internal manufacturing. See the results of my HTML data mining and a process explanation below.
 
+Recommendation: create an web scraping pipeline to automate the collection of competitor web data monthly for more impactful benchmarking projects.
+
 <ins><b>Product types:</b></ins>
 * <b>Semi-transparent (39 products)</b>
   * Price range: $51 - $231 per yd.
@@ -120,7 +122,7 @@ with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
 
 Because of structural inconsistencies in the webpages, some easily identifiable errors were present in the dataset and I corrected them before cleaning with R.
 
-The dataset could have been fully cleaned with Python or Excel, but I prefer R for this type of analysis.
+The dataset could have been fully cleaned with Python or Excel, but I prefer R for this type of one-off analysis. I would use Python for this stage if I was trying to build an automated web data collection pipeline.
 
 
 
