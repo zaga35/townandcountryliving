@@ -174,3 +174,7 @@ with open(csv_file_path, mode='w', newline='', encoding='utf-8') as file:
 ```
  
  12. Pulled the data into R for analysis (also in .rmd)
+
+The limitation of relying on Internet Archive is that it crawls pages irregularly, so a lot of information is lost. Collecting this data regularly is best practice for executing meaningful benchmarking projects.
+
+
