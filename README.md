@@ -28,6 +28,7 @@ I chose to analyze Carnegie Fabrics because they are a direct competitor for win
 * LEED - sustainability
 * ISO 9001/14001 - product quality
 * Mindful Materials - supply chain
+* HHI - product quality
 
 <ins><b>Material:</b></ins>
 * Polyester and recycled polyester
