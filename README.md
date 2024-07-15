@@ -120,10 +120,55 @@ with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
 
 Because of structural inconsistencies in the webpages, some easily identifiable errors were present in the dataset and I corrected them before cleaning with R.
 
-The dataset could have been cleaned with Python or Excel, but I prefer R for this type of analysis.
+The dataset could have been fully cleaned with Python or Excel, but I prefer R for this type of analysis.
 
 
 
 8.   Launched an R notebook (view .rmd to see analysis)
 
 9.   Visited https://web.archive.org/https://carnegiefabrics.com/windows to find screenshots of the Carnegie Fabrics site from an earlier date
+
+10.   Repeated the same process for scraping prices from Carnegie Fabrics Internet Archive links
+
+```
+    import requests
+from bs4 import BeautifulSoup
+import csv
+
+#avoid bot blockers
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+
+#request content
+url='http://web.archive.org/web/20201208151437/https://carnegiefabrics.com/landing/privacy/'
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    page_content = response.content
+else:
+    print(f"Failed to retrieve webpage")
+
+#parse the page
+if page_content:
+    soup = BeautifulSoup(page_content, 'html.parser')
+
+product_names = soup.find_all('h4', class_='product-name')
+prices = soup.find_all('span', class_='price')
+
+#extract text
+product_names_text = [product.get_text(strip=True) for product in product_names]
+product_price_text = [price.get_text(strip=True) for price in prices]
+
+#print extracted
+for name, price in zip(product_names_text, product_price_text): print(f"Product Name: {name}, Price: {price}")
+
+
+#create .csv
+csv_file_path = '2020Dec8Carnegie5.csv'
+with open(csv_file_path, mode='w', newline='', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Product Name', 'Price'])
+    for name, price in zip(product_names_text, product_price_text): writer.writerow([name, price])
+    print(f"Data has been exported to {csv_file_path}")
+```
+ 
+ 12. Pulled the data into R for analysis (also in .rmd)
