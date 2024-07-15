@@ -1,7 +1,7 @@
 # Carnegie Fabrics Window Products
 I chose to analyze Carnegie Fabrics because they are a direct competitor for window products and also utilize internal manufacturing. See the results of my HTML data mining and a process explanation below.
 
-Recommendation: create an web scraping pipeline to automate the collection of competitor web data monthly for more impactful benchmarking projects.
+<b>Recommendation:</b> create an web scraping pipeline to automate the collection of competitor web data monthly for more impactful benchmarking projects.
 
 <ins><b>Product types:</b></ins>
 * <b>Semi-transparent (39 products)</b>
