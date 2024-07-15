@@ -1,0 +1,195 @@
+---
+title: "Carnegie Fabrics Analysis"
+author: "Zachary Garcia"
+date: "2024-07-13"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(readxl)
+library(tidyverse)
+library(dplyr)
+library(psych)
+```
+
+Import data
+
+```{r import}
+
+file_in <- "C:/Users/a0507441/Desktop/carnegie_fabrics_products_raw.xlsx"
+
+df <- read_excel(file_in)
+
+```
+
+Remove columns that I'm uninterested in at the moment
+
+```{r clean}
+
+clean_df <- df %>%
+  select(-c(`Acoustics:`, `Additional Details:`, `Additional Downloads and Links`, `Available Backing(s):`, `Available Finish(es):`, `Backing (as stocked):`, `Backing:`, `Cleaning Documents`, `Configuration Options:`, `Content:`, `Copyright:`, `Dimensions:`, `Durability:`, `Environmental Product Declaration`, `Finish/es (as stocked):`, `Flame Certificates`, `Flammability:`, `Free of:`, `Health Product Declaration`, `IMO Certification Type:`, `Install Documents`, `Lightfastness:`, `Manufactured In:`, `Oddy Test:`, `Product Specifications`, `Railroad Note(s):`, `Repeat:`, `Test Results`, `Uses:`, `Weight Per Unit:`))
+
+```
+
+Standardize product types
+
+```{r clean2}
+
+clean_df <- clean_df %>% mutate(Type= case_when(
+  Type %in% c("DimmerOpaque", "AcousticalDimmerOpaque", "AcousticalOpaque")~"Opaque", TRUE ~ Type
+))
+
+clean_df <- clean_df %>% mutate(Type= case_when(
+  Type %in% c("Suitable for Indoor and Outdoor useSemi-Transparent", "AcousticalSemi-Transparent")~"Semi-Transparent", TRUE ~ Type
+))
+
+clean_df <- clean_df %>% mutate(Type= case_when(
+  Type %in% c("Suitable for Indoor and Outdoor useSheer", "AcousticalSheer")~"Sheer", TRUE ~ Type
+))
+
+```
+
+Product type analysis
+
+```{r types}
+
+sheer_count <- sum(clean_df$Type == "Sheer")
+opaque_count <- sum(clean_df$Type == "Opaque")
+semitransparent_count <- sum(clean_df$Type == "Semi-Transparent")
+other <- sum(!(clean_df$Type %in% c("Sheer", "Opaque", "Semi-Transparent")))
+
+print(sheer_count)
+print(opaque_count)
+print(semitransparent_count)
+print(other)
+
+```
+Visualize product types
+
+```{r vistypes}
+
+type_counts <- data.frame(
+  Type = c("Sheer", "Opaque", "Semi-Transparent", "Other"), Count = c(sheer_count, opaque_count, semitransparent_count, other))
+
+custom_colors<- c("Sheer"= "#66c2a5", "Opaque"= "blue", "Semi-Transparent"= "red", "Other"= "grey")
+
+pie_chart_types <- ggplot(type_counts, aes(x="", y= Count, fill= Type)) +
+  geom_bar(width=1, stat="identity")+ coord_polar("y", start=0)+ theme_void()+
+  labs(fill="Type")+ theme(legend.title= element_text(size=14), legend.text = element_text(size=12))
+
+pie_chart_types <- pie_chart_types + geom_text(aes(label= Count), position= position_stack(vjust= 0.5))+scale_fill_manual(values=custom_colors)
+
+print(pie_chart_types)
+
+```
+Add pricing info
+
+```{r addpricing}
+trial<- clean_df
+
+additional_data <- "C:/Users/a0507441/Desktop/2024Jul13Windows.csv"
+
+prices_in <- read_csv(additional_data) 
+
+```
+Add column
+
+```{r addcolumn}
+
+if (nrow(trial) == nrow(prices_in)) {trial$Price <- prices_in$Price} else {stop("error")}
+
+```
+
+Types and Prices
+
+```{r pricesandtypes}
+
+opaque_prices_df <- trial[trial$Type == "Opaque", c("Type", "Price")]
+semitransparent_prices_df <- trial[trial$Type == "Semi-Transparent", c("Type", "Price")]
+sheer_prices_df <- trial[trial$Type == "Sheer", c("Type", "Price")]
+
+```
+
+Get the price range and harmonic mean
+
+```{r rangeandharmonic}
+opaque_prices_df$Price <- as.numeric(gsub("\\$", "", opaque_prices_df$Price))
+price_range_opaque <- range(opaque_prices_df$Price)
+harmonic_mean_opaque<- harmonic.mean(opaque_prices_df$Price)
+
+semitransparent_prices_df$Price <- as.numeric(gsub("\\$", "", semitransparent_prices_df$Price))
+price_range_semitransparent <- range(semitransparent_prices_df$Price)
+harmonic_mean_semitransparent<- harmonic.mean(semitransparent_prices_df$Price)
+
+sheer_prices_df$Price <- as.numeric(gsub("\\$", "", sheer_prices_df$Price))
+price_range_sheer <- range(sheer_prices_df$Price)
+harmonic_mean_sheer<- harmonic.mean(sheer_prices_df$Price)
+
+cat("Range of opaque prices:", price_range_opaque, "\n")
+cat("Harmonic mean of opaque prices:", harmonic_mean_opaque, "\n")
+cat("Range of semi-transparent prices:", price_range_semitransparent, "\n")
+cat("Harmonic mean of opaque prices:", harmonic_mean_semitransparent, "\n")
+cat("Range of sheer prices:", price_range_sheer, "\n")
+cat("Harmonic mean of sheer prices:", harmonic_mean_sheer, "\n")
+
+```
+Type and width
+```{r width}
+opaque_width_df <- trial[trial$Type == "Opaque", c("Type", "Width:")]
+semitransparent_width_df <- trial[trial$Type == "Semi-Transparent", c("Type", "Width:")]
+sheer_width_df <- trial[trial$Type == "Sheer", c("Type", "Width:")]
+
+
+```
+
+```{r countwidth}
+
+opaque_width <- opaque_width_df %>% group_by(`Width:`)%>% summarise(count= n())%>%
+  mutate(label= paste(`Width:`, count, sep= ": "))
+
+sheer_width <- sheer_width_df %>% group_by(`Width:`)%>% summarise(count= n())%>%
+  mutate(label= paste(`Width:`, count, sep= ": "))
+
+semi_width <- semitransparent_width_df %>% group_by(`Width:`)%>% summarise(count= n())%>%
+  mutate(label= paste(`Width:`, count, sep= ": "))
+
+print(opaque_width)
+print(sheer_width)
+print(semi_width)
+
+```
+
+Weight and type
+
+```{r typeweight}
+
+opaque_weight_df <- trial[trial$Type == "Opaque", c("Type", "Weight per Linear Yard (oz)")]
+semitransparent_weight_df <- trial[trial$Type == "Semi-Transparent", c("Type", "Weight per Linear Yard (oz)")]
+sheer_weight_df <- trial[trial$Type == "Sheer", c("Type", "Weight per Linear Yard (oz)")]
+
+```
+
+```{r weight}
+
+opaque_weight <- opaque_weight_df %>% group_by(`Weight per Linear Yard (oz)`)%>% summarise(count= n())%>%
+  mutate(label= paste(`Weight per Linear Yard (oz)`, count, sep= ": "))
+
+sheer_weight <- sheer_weight_df %>% group_by(`Weight per Linear Yard (oz)`)%>% summarise(count= n())%>%
+  mutate(label= paste(`Weight per Linear Yard (oz)`, count, sep= ": "))
+
+semi_weight <- semitransparent_weight_df %>% group_by(`Weight per Linear Yard (oz)`)%>% summarise(count= n())%>%
+  mutate(label= paste(`Weight per Linear Yard (oz)`, count, sep= ": "))
+
+print(opaque_weight)
+print(sheer_weight)
+print(semi_weight)
+
+```
+
+Export clean_df for github
+
+```{r xlsx}
+
+write_xlsx(clean_df, path= "carnegie_fabrics_products_clean.xlsx")
+
+```
