@@ -21,16 +21,20 @@ I chose to analyze Carnegie Fabrics because they are a direct competitor for win
 * 2024:
 
 <ins><b>Common warranty periods:</b></ins>
-* 3 years (X products)
-* 10 years (X products)
+* 3 years (94 products)
+* 10 years (8 products)
 
 <ins><b>Common certifications:</b></ins>
 * LEED - sustainability
 * ISO 9001/14001 - product quality
 * Mindful Materials - supply chain
 
+<ins><b>Material:</b></ins>
+* Polyester and recycled polyester
+
 <ins><b>Common cleaning codes:</b></ins>
-* WS - Water / Solvent (X products)
+* WS - Water / Solvent (95 products)
+* WS & BC - Water / Solvent & Bleach Cleanable (12 products)
 
 # Data Mining Process
 1. Visited https://carnegiefabrics.com/windows and inspected the HTML
