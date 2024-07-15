@@ -8,14 +8,17 @@ I chose to analyze Carnegie Fabrics because they are a direct competitor for win
   * Price range: $51 - $231 per yd.
   * Harmonic mean price: $124.81 per yd.
   * Common width: 118" (14 products)
+  * Weight range: 10.9 oz - 17.7 oz per yd.
 * <b>Sheer (34 products)</b>
   * Price range: $30 - $243 per yd.
   * Harmonic mean price: $102.54 per yd.
   * Common width: 118" (22 products)
+  * Weight range: 1.61 oz - 12.95 oz per yd.
 * <b>Opaque (33 products)</b>
   * Price range: $34 - $835 per yd.
   * Harmonic mean price: $89.84 per yd.
   * Common widths: 118" (10 products) and 72" (9 products)
+  * Weight range: 10 oz - 12.5 oz per yd.
 
 <ins><b>Pricing data scraped from Internet Archive:</b></ins>
 * 2020:
