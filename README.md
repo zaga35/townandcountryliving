@@ -21,10 +21,13 @@ I chose to analyze Carnegie Fabrics because they are a direct competitor for win
   * Weight range: 10 oz - 12.5 oz per yd.
 
 <ins><b>Pricing data scraped from Internet Archive:</b></ins>
-* 2020:
+* <b>2020:</b>
+  * Price range: $23 - $450 per yd. 
 * 2021 and 2022 data not available via archive
-* 2023:
-* 2024:
+* <b>2023:</b>
+  * Price range: $30 - $739 per yd.
+* <b>2024:</b>
+  * Price range: $34 - $1105 per yd.
 
 <ins><b>Common warranty periods:</b></ins>
 * 3 years (94 products)
